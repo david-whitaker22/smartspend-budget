@@ -21,13 +21,13 @@ const Header = ({ userEmail = 'user@example.com', onLogout }: HeaderProps) => {
   const { toast } = useToast();
 
   const handleSignOut = () => {
-    // Clear all local storage data
-    localStorage.clear();
+    // Only clear authentication data, not user's expense/category data
+    localStorage.removeItem('userEmail');
     
     // Show success toast
     toast({
       title: "Signed out successfully",
-      description: "All your data has been cleared from this device.",
+      description: "Your data has been saved and will be available when you sign back in.",
     });
     
     // Call the logout handler to update auth state

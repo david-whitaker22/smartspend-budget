@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import AddExpense from '@/components/AddExpense';
 import RecentExpenses from '@/components/RecentExpenses';
@@ -15,6 +15,40 @@ const Index = ({ userEmail, onLogout }: IndexProps) => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
   const [categoryEditorOpen, setCategoryEditorOpen] = useState(false);
+
+  // Load data from localStorage on mount
+  useEffect(() => {
+    const savedExpenses = localStorage.getItem(`expenses_${userEmail}`);
+    const savedCategories = localStorage.getItem(`categories_${userEmail}`);
+    
+    if (savedExpenses) {
+      try {
+        setExpenses(JSON.parse(savedExpenses));
+      } catch (error) {
+        console.error('Error loading expenses:', error);
+      }
+    }
+    
+    if (savedCategories) {
+      try {
+        setCategories(JSON.parse(savedCategories));
+      } catch (error) {
+        console.error('Error loading categories:', error);
+      }
+    }
+  }, [userEmail]);
+
+  // Save expenses to localStorage whenever they change
+  useEffect(() => {
+    if (expenses.length > 0) {
+      localStorage.setItem(`expenses_${userEmail}`, JSON.stringify(expenses));
+    }
+  }, [expenses, userEmail]);
+
+  // Save categories to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(`categories_${userEmail}`, JSON.stringify(categories));
+  }, [categories, userEmail]);
 
   const handleAddExpense = (expenseData: Omit<Expense, 'id'>) => {
     const newExpense: Expense = {
