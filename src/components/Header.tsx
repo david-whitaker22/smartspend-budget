@@ -8,12 +8,30 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 interface HeaderProps {
   userEmail?: string;
 }
 
 const Header = ({ userEmail = 'user@example.com' }: HeaderProps) => {
+  const { toast } = useToast();
+
+  const handleSignOut = () => {
+    // Clear all local storage data
+    localStorage.clear();
+    
+    // Show success toast
+    toast({
+      title: "Signed out successfully",
+      description: "All your data has been cleared from this device.",
+    });
+    
+    // Reload the page to reset the app state
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
   return (
     <header className="w-full border-b border-border bg-card">
       <div className="mx-auto max-w-5xl px-6 py-4">
@@ -45,7 +63,10 @@ const Header = ({ userEmail = 'user@example.com' }: HeaderProps) => {
                 <span>Settings</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive">
+              <DropdownMenuItem 
+                className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
+                onClick={handleSignOut}
+              >
                 <LogOut className="h-4 w-4" />
                 <span>Sign out</span>
               </DropdownMenuItem>
