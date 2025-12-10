@@ -12,9 +12,10 @@ import { useToast } from '@/hooks/use-toast';
 
 interface HeaderProps {
   userEmail?: string;
+  onLogout?: () => void;
 }
 
-const Header = ({ userEmail = 'user@example.com' }: HeaderProps) => {
+const Header = ({ userEmail = 'user@example.com', onLogout }: HeaderProps) => {
   const { toast } = useToast();
 
   const handleSignOut = () => {
@@ -27,10 +28,12 @@ const Header = ({ userEmail = 'user@example.com' }: HeaderProps) => {
       description: "All your data has been cleared from this device.",
     });
     
-    // Reload the page to reset the app state
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
+    // Call the logout handler to update auth state
+    if (onLogout) {
+      setTimeout(() => {
+        onLogout();
+      }, 500);
+    }
   };
   return (
     <header className="w-full border-b border-border bg-card">

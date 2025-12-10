@@ -6,7 +6,12 @@ import SpendingByCategory from '@/components/SpendingByCategory';
 import CategoryEditor from '@/components/CategoryEditor';
 import { Expense, Category, DEFAULT_CATEGORIES } from '@/types/expense';
 
-const Index = () => {
+interface IndexProps {
+  userEmail: string;
+  onLogout: () => void;
+}
+
+const Index = ({ userEmail, onLogout }: IndexProps) => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
   const [categoryEditorOpen, setCategoryEditorOpen] = useState(false);
@@ -25,7 +30,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <Header userEmail={userEmail} onLogout={onLogout} />
       
       <main className="mx-auto max-w-5xl px-6 py-8">
         <div className="mb-8">
