@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import SettingsDialog from './SettingsDialog';
 
 interface HeaderProps {
   userEmail?: string;
@@ -16,6 +17,7 @@ interface HeaderProps {
 }
 
 const Header = ({ userEmail = 'user@example.com', onLogout }: HeaderProps) => {
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const { toast } = useToast();
 
   const handleSignOut = () => {
@@ -61,7 +63,10 @@ const Header = ({ userEmail = 'user@example.com', onLogout }: HeaderProps) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 bg-popover">
-              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+              <DropdownMenuItem 
+                className="flex items-center gap-2 cursor-pointer"
+                onClick={() => setSettingsOpen(true)}
+              >
                 <Settings className="h-4 w-4" />
                 <span>Settings</span>
               </DropdownMenuItem>
@@ -77,6 +82,8 @@ const Header = ({ userEmail = 'user@example.com', onLogout }: HeaderProps) => {
           </DropdownMenu>
         </div>
       </div>
+      
+      <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
     </header>
   );
 };
